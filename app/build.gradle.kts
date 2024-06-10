@@ -6,12 +6,26 @@
  */
 
 plugins {
-    id("com.github.node-gradle.node") version "2.2.4"
+    id("com.github.node-gradle.node") version "3.0.1" // Use the latest version
 }
 
 node {
     version.set("9.11.2")
     download.set(true)
+}
+
+tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInstall") {
+    args.set(listOf("install"))
+}
+
+tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_build") {
+    args.set(listOf("run", "build"))
+    dependsOn(tasks.named("npmInstall"))
+}
+
+tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_test") {
+    args.set(listOf("test"))
+    dependsOn(tasks.named("npmInstall"))
 }
 
 tasks.register<Zip>("zip") {
@@ -26,29 +40,14 @@ tasks.register<Zip>("zip") {
     }
     destinationDirectory.set(file("dist"))
     archiveBaseName.set("trainSchedule")
-    dependsOn("npm_build")
-}
-
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInstall") {
-    setArgs(listOf("install"))
-}
-
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_build") {
-    setArgs(listOf("run", "build"))
-    dependsOn("npmInstall")
-}
-
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_test") {
-    setArgs(listOf("test"))
-    dependsOn("npmInstall")
+    dependsOn(tasks.named("npm_build"))
 }
 
 tasks.named("build") {
-    dependsOn("zip")
-    dependsOn("npm_build")
+    dependsOn(tasks.named("zip"))
+    dependsOn(tasks.named("npm_build"))
 }
 
 tasks.named("npm_build") {
-    dependsOn("npm_test")
+    dependsOn(tasks.named("npm_test"))
 }
-
