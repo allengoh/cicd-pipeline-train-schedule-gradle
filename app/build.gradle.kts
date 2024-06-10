@@ -14,7 +14,7 @@ node {
     download.set(true)
 }
 
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInstall") {
+tasks.named<com.github.gradle.node.npm.task.NpmTask>("npmInstall") {
     args.set(listOf("install"))
 }
 
@@ -51,3 +51,4 @@ tasks.named("build") {
 tasks.named("npm_build") {
     dependsOn(tasks.named("npm_test"))
 }
+
