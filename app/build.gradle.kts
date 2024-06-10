@@ -14,22 +14,24 @@ node {
     version.set("9.11.2")
     download.set(true)
     workDir.set(file("${project.projectDir}/node"))
-    nodeModulesDir.set(file("${project.projectDir}/node_modules"))
+    nodeProjectDir.set(file("${project.projectDir}"))
 }
 
 tasks.named<com.github.gradle.node.npm.task.NpmInstallTask>("npmInstall") {
-    packageJsonFile.set(file("${project.projectDir}/package.json"))
     args.set(listOf("install"))
+    workingDir.set(file("${project.projectDir}"))
 }
 
 tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_build") {
     args.set(listOf("run", "build"))
     dependsOn(tasks.named("npmInstall"))
+    workingDir.set(file("${project.projectDir}"))
 }
 
 tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_test") {
     args.set(listOf("test"))
     dependsOn(tasks.named("npmInstall"))
+    workingDir.set(file("${project.projectDir}"))
 }
 
 tasks.register<Zip>("zip") {
@@ -55,4 +57,3 @@ tasks.named("build") {
 tasks.named("npm_build") {
     dependsOn(tasks.named("npm_test"))
 }
-
