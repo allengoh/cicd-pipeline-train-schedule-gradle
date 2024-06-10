@@ -7,6 +7,7 @@
 
 plugins {
     id("com.github.node-gradle.node") version "3.0.1" // Use the latest version
+    `base`
 }
 
 node {
@@ -51,4 +52,3 @@ tasks.named("build") {
 tasks.named("npm_build") {
     dependsOn(tasks.named("npm_test"))
 }
-
