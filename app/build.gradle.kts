@@ -14,22 +14,6 @@ node {
     download.set(true)
 }
 
-tasks.register("build")
-
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInstall") {
-    setArgs(listOf("install"))
-}
-
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_build") {
-    setArgs(listOf("run", "build"))
-    dependsOn("npmInstall")
-}
-
-tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_test") {
-    setArgs(listOf("test"))
-    dependsOn("npmInstall")
-}
-
 tasks.register<Zip>("zip") {
     from(".") {
         include("*")
@@ -45,6 +29,20 @@ tasks.register<Zip>("zip") {
     dependsOn("npm_build")
 }
 
+tasks.register<com.github.gradle.node.npm.task.NpmTask>("npmInstall") {
+    setArgs(listOf("install"))
+}
+
+tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_build") {
+    setArgs(listOf("run", "build"))
+    dependsOn("npmInstall")
+}
+
+tasks.register<com.github.gradle.node.npm.task.NpmTask>("npm_test") {
+    setArgs(listOf("test"))
+    dependsOn("npmInstall")
+}
+
 tasks.named("build") {
     dependsOn("zip")
     dependsOn("npm_build")
@@ -53,3 +51,4 @@ tasks.named("build") {
 tasks.named("npm_build") {
     dependsOn("npm_test")
 }
+
