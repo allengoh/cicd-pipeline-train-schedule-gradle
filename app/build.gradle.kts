@@ -13,9 +13,12 @@ plugins {
 node {
     version.set("9.11.2")
     download.set(true)
+    workDir.set(file("${project.projectDir}/node"))
+    nodeModulesDir.set(file("${project.projectDir}/node_modules"))
 }
 
-tasks.named<com.github.gradle.node.npm.task.NpmTask>("npmInstall") {
+tasks.named<com.github.gradle.node.npm.task.NpmInstallTask>("npmInstall") {
+    packageJsonFile.set(file("${project.projectDir}/package.json"))
     args.set(listOf("install"))
 }
 
@@ -52,3 +55,4 @@ tasks.named("build") {
 tasks.named("npm_build") {
     dependsOn(tasks.named("npm_test"))
 }
+
