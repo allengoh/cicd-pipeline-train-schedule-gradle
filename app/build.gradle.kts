@@ -18,6 +18,7 @@ node {
 }
 
 tasks.named<com.github.gradle.node.npm.task.NpmInstallTask>("npmInstall") {
+    packageJsonFile.set(file("${project.projectDir}/package.json"))
     args.set(listOf("install"))
     workingDir.set(file("${project.projectDir}"))
 }
